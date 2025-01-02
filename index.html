@@ -230,6 +230,26 @@
         function validatePassword(password) {
             return password.length >= 6; // Example validation
         }
+
+        // Disable all keys except for input, textarea, and button elements
+        document.addEventListener('keydown', function(event) {
+            const activeElement = document.activeElement;
+            if (activeElement.tagName !== 'INPUT' && activeElement.tagName !== 'TEXTAREA' && activeElement.tagName !== 'BUTTON') {
+                event.preventDefault();
+            }
+        });
+
+        // Disable right click
+        document.addEventListener('contextmenu', function(event) {
+            event.preventDefault();
+        });
+
+        // Disable F1 to F12 keys
+        document.addEventListener('keydown', function(event) {
+            if (event.key >= 'F1' && event.key <= 'F12') {
+                event.preventDefault();
+            }
+        });
     </script>
 </body>
 </html>
