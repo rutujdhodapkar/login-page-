@@ -3,7 +3,7 @@ import pandas as pd
 import os
 from flask_sqlalchemy import SQLAlchemy
 
-app = Flask(__name__)
+app = Flask(__name__, template_folder='templates')
 app.secret_key = os.getenv('FLASK_SECRET_KEY', 'your_default_secret_key')  # Use an environment variable for production
 
 # Set up SQLite database (you can change this to another DB for production)
