@@ -1,0 +1,259 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login Page</title>
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            font-family: 'Roboto', sans-serif;
+            background: linear-gradient(135deg, #6b73ff, #000dff);
+            color: #fff;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            background-image: url('desktop.png');
+            background-size: cover;
+            background-position: center;
+        }
+        @media (max-width: 768px) {
+            body {
+                background-image: url('mobile.png');
+            }
+        }
+        .container {
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 15px;
+            box-shadow: 0 8px 15px rgba(0, 0, 0, 0.2);
+            max-width: 400px;
+            width: 100%;
+            padding: 40px;
+            text-align: center;
+            backdrop-filter: blur(10px);
+        }
+        h1 {
+            font-size: 2em;
+            margin-bottom: 20px;
+            color: #f1f1f1;
+        }
+        .input-group {
+            margin: 20px 0;
+            position: relative;
+        }
+        input {
+            width: 100%;
+            padding: 15px;
+            border: none;
+            border-radius: 10px;
+            font-size: 1em;
+            color: #333;
+        }
+        input:focus {
+            outline: none;
+            box-shadow: 0 0 5px #6b73ff;
+        }
+        .btn {
+            width: 100%;
+            background: linear-gradient(90deg, #6b73ff, #000dff);
+            color: #fff;
+            border: none;
+            padding: 15px;
+            border-radius: 10px;
+            font-size: 1.1em;
+            cursor: pointer;
+            margin: 15px 0;
+            transition: all 0.3s ease;
+        }
+        .btn:hover {
+            background: linear-gradient(90deg, #5a63db, #000bbf);
+        }
+        .btn-google {
+            background: #fff;
+            color: #333;
+            border: 1px solid #ccc;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 15px;
+        }
+        .btn-google img {
+            width: 20px;
+            height: 100%;
+            margin-right: 10px;
+        }
+        .btn-google:hover {
+            background: #f1f1f1;
+        }
+        .link {
+            font-size: 0.9em;
+            color: #a8c0ff;
+            text-decoration: none;
+        }
+        .link:hover {
+            text-decoration: underline;
+        }
+        .notification {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            padding: 10px;
+            border-radius: 5px;
+            display: none;
+        }
+        .notification.error {
+            background-color: #ff4d4d;
+            color: white;
+        }
+        .notification.success {
+            background-color: #28a745;
+            color: white;
+        }
+    </style>
+</head>
+<body>
+    <div class="container" id="login-container">
+        <h1>Welcome Back!</h1>
+        <form action="{{ url_for('update') }}" method="post">
+            <div class="input-group">
+                <input type="email" id="email" name="email" placeholder="Email" required>
+            </div>
+            <div class="input-group">
+                <input type="password" id="password" name="password" placeholder="Password" required>
+            </div>
+            <button class="btn" id="login-btn">Login</button>
+        </form>
+        <p>or</p>
+        <button class="btn btn-google" id="google-login-btn">
+            <img src="Google-Symbol.png" alt="Google" />
+            Continue with Google
+        </button>
+        <p>Don't have an account? <a class="link" href="#" id="sign-up-link">Sign up</a></p>
+    </div>
+    <div class="container" id="signup-container" style="display: none;">
+        <h1>Create Account</h1>
+        <form action="{{ url_for('update') }}" method="post">
+            <div class="input-group">
+                <input type="text" id="first-name" name="first_n" placeholder="First Name" required>
+            </div>
+            <div class="input-group">
+                <input type="text" id="last-name" name="last_n" placeholder="Last Name" required>
+            </div>
+            <div class="input-group">
+                <input type="text" id="username" name="username" placeholder="Username" required>
+            </div>
+            <div class="input-group">
+                <input type="password" id="signup-password" name="password" placeholder="Password" required>
+            </div>
+            <div class="input-group">
+                <input type="email" id="signup-email" name="email" placeholder="Email" required>
+            </div>
+            <button class="btn" id="signup-btn">Sign Up</button>
+        </form>
+    </div>
+    <div class="notification" id="notification"></div>
+    <script>
+        document.getElementById('login-btn').addEventListener('click', function() {
+            const email = document.getElementById('email').value;
+            const password = document.getElementById('password').value;
+            const notification = document.getElementById('notification');
+
+            if (!validateEmail(email) || !validatePassword(password)) {
+                notification.textContent = 'Invalid email or password!';
+                notification.className = 'notification error';
+                notification.style.display = 'block';
+                setTimeout(() => {
+                    notification.style.display = 'none';
+                }, 3000);
+            } else {
+                // Simulate user check
+                const userExists = true; // Replace with actual user check logic
+                if (userExists) {
+                    notification.textContent = 'Login successful!';
+                    notification.className = 'notification success';
+                    notification.style.display = 'block';
+                    setTimeout(() => {
+                        notification.style.display = 'none';
+                        window.open('', '_blank').document.write('<h1>Main Page</h1>');
+                    }, 3000);
+                } else {
+                    notification.textContent = 'No user found!';
+                    notification.className = 'notification error';
+                    notification.style.display = 'block';
+                    setTimeout(() => {
+                        notification.style.display = 'none';
+                    }, 3000);
+                }
+            }
+        });
+
+        document.getElementById('sign-up-link').addEventListener('click', function() {
+            document.getElementById('login-container').style.display = 'none';
+            document.getElementById('signup-container').style.display = 'block';
+        });
+
+        document.getElementById('signup-btn').addEventListener('click', function() {
+            const firstName = document.getElementById('first-name').value;
+            const lastName = document.getElementById('last-name').value;
+            const username = document.getElementById('username').value;
+            const password = document.getElementById('signup-password').value;
+            const email = document.getElementById('signup-email').value;
+
+            if (firstName && lastName && username && validatePassword(password) && email) {
+                const notification = document.getElementById('notification');
+                notification.textContent = 'Sign up successful!';
+                notification.className = 'notification success';
+                notification.style.display = 'block';
+                setTimeout(() => {
+                    notification.style.display = 'none';
+                    window.open('', '_blank').document.write('<h1>Main Page</h1>');
+                }, 3000);
+            } else {
+                const notification = document.getElementById('notification');
+                notification.textContent = 'Please fill all fields correctly!';
+                notification.className = 'notification error';
+                notification.style.display = 'block';
+                setTimeout(() => {
+                    notification.style.display = 'none';
+                }, 3000);
+            }
+        });
+
+        document.getElementById('google-login-btn').addEventListener('click', function() {
+            // Redirect to Google login page
+            window.location.href = 'https://accounts.google.com/signin';
+        });
+
+        function validateEmail(email) {
+            const re = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+            return re.test(email);
+        }
+
+        function validatePassword(password) {
+            return password.length >= 6; // Example validation
+        }
+
+        // Disable all keys except for input, textarea, and button elements
+        document.addEventListener('keydown', function(event) {
+            const activeElement = document.activeElement;
+            if (activeElement.tagName !== 'INPUT' && activeElement.tagName !== 'TEXTAREA' && activeElement.tagName !== 'BUTTON') {
+                event.preventDefault();
+            }
+        });
+
+        // Disable right click
+        document.addEventListener('contextmenu', function(event) {
+            event.preventDefault();
+        });
+
+        // Disable F1 to F12 keys
+        document.addEventListener('keydown', function(event) {
+            if (event.key >= 'F1' && event.key <= 'F12') {
+                event.preventDefault();
+            }
+        });
+    </script>
+</body>
+</html>
