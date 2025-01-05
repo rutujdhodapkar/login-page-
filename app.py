@@ -2,11 +2,11 @@ from flask import Flask, render_template, request, redirect, url_for, flash
 import pandas as pd
 import os
 
-app = Flask(__name__, template_folder='C:\\Users\\rutuj\\OneDrive\\Desktop\\New folder')
+
 app.secret_key = 'your_secret_key_here'  # Set the secret key to something unique and secret
 
 # Ensure the CSV file exists
-csv_file_path = 'C:\\Users\\rutuj\\OneDrive\\Desktop\\Project\\userinfo.csv'
+csv_file_path = 'userinfo.csv'
 if not os.path.exists(csv_file_path):
     pd.DataFrame(columns=['first_n', 'last_n', 'username', 'email', 'password']).to_csv(csv_file_path, index=False)
 
